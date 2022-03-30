@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RequestOnDate.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.model</a> &gt; <span class="el_source">RequestOnDate.java</span></div><h1>RequestOnDate.java</h1><pre class="source lang-java linenums">package comp3111.covid.model;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The implementation of Request for a request on a specific date
+ */
+public class RequestOnDate extends Request{
+<span class="fc" id="L9">	private List&lt;Record&gt; listRecord = new ArrayList&lt;&gt;();</span>
+	private String date;
+<span class="fc" id="L11">	private List&lt;String&gt;listCountry = new ArrayList&lt;&gt;();</span>
+	
+	/**
+	 * Constructor to create a RequestOnDate object and create the corresponding 
+	 * instances of subtype of {@link Record} for all countries on the date
+	 * @param listCountry		The list of countries of interest
+	 * @param date				The date of interest
+	 * @param type				The type of record requested:
+	 * 							1 for {@link DeathRecord}
+	 * 							2 for {@link ConfirmedCaseRecord}
+	 * 							3 for {@link VaccinationRecord}
+	 */
+<span class="fc" id="L23">	public RequestOnDate(ArrayList&lt;String&gt;listCountry, String date, int type) {</span>
+<span class="fc" id="L24">		this.listCountry = listCountry;</span>
+<span class="fc" id="L25">		this.date = date;</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">		if(type == 1) {//Death</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">			for(var c: listCountry) {</span>
+<span class="fc" id="L28">				Record temp = new DeathRecord(c,date);</span>
+<span class="fc" id="L29">				listRecord.add(temp);</span>
+<span class="fc" id="L30">			}</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">		}else if(type == 2) {//ConfirmedCase</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">			for(var c: listCountry) {</span>
+<span class="fc" id="L33">				Record temp = new ConfirmedCaseRecord(c,date);</span>
+<span class="fc" id="L34">				listRecord.add(temp);</span>
+<span class="fc" id="L35">			}</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">		}else if(type == 3) {//vaccination</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">			for(var c: listCountry) {</span>
+<span class="fc" id="L38">				Record temp = new VaccinationRecord(c,date);</span>
+<span class="fc" id="L39">				listRecord.add(temp);</span>
+<span class="fc" id="L40">			}</span>
+		}
+		
+<span class="fc" id="L43">	}</span>
+	
+	/**
+	 * Getter method to get the record for a specific country
+	 * @param country		The country of the required record
+	 * @return				The instance of subtype of {@link Record} of the required record
+	 */
+	public Record getRecord(String country) {
+<span class="fc" id="L51">		int idx = listCountry.indexOf(country);</span>
+<span class="fc" id="L52">		return listRecord.get(idx);</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

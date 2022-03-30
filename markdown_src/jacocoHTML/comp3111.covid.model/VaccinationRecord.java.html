@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VaccinationRecord.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.model</a> &gt; <span class="el_source">VaccinationRecord.java</span></div><h1>VaccinationRecord.java</h1><pre class="source lang-java linenums">package comp3111.covid.model;
+import comp3111.covid.DataAnalysis;
+
+/**
+ * The implementation of abstract class Record with the data of vaccination
+ * @author ZHANG, Yuanhao
+ */
+public class VaccinationRecord extends Record{
+	private long NumVaccination;
+	private double VaccinationRate;
+	private String RateInPercentage;
+	private String NumString;
+	
+	/**
+	 * Constructor to create a VaccincationRecord object and fetch the data from the dataset
+	 * @param country 		The country of this record
+	 * @param date			The date of this record in the standard form of the dataset
+	 */
+	public VaccinationRecord(String country, String date) {
+<span class="fc" id="L20">		super(country,date);</span>
+<span class="fc" id="L21">		this.NumVaccination = DataAnalysis.getVaccinationa(&quot;COVID_Dataset_v1.0.csv&quot; , country, date);</span>
+<span class="fc" id="L22">		this.VaccinationRate = DataAnalysis.getVaccinationPer(&quot;COVID_Dataset_v1.0.csv&quot; , country, date);</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">		if(this.VaccinationRate &lt; 0.0000001)</span>
+<span class="fc" id="L24">			this.RateInPercentage = &quot;No data&quot;;</span>
+		else
+<span class="fc" id="L26">			this.RateInPercentage = String.valueOf(this.VaccinationRate) + &quot;%&quot;;</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">		if(this.NumVaccination == 0) {</span>
+<span class="fc" id="L28">			this.NumString = &quot;No data&quot;;</span>
+		}else
+<span class="fc" id="L30">			this.NumString = String.valueOf(this.NumVaccination);</span>
+<span class="fc" id="L31">	}</span>
+	
+	/**
+	 * Getter method to get the total number people fully vaccinated of this record
+	 * @return		The total number of vaccinations of this record
+	 */
+	public final long getNumVaccination() {
+<span class="fc" id="L38">        return this.NumVaccination;</span>
+    }
+    
+	/**
+	 * Getter method to get the vaccinations rate of this record
+	 * @return		The vaccinations rate of this record
+	 */
+    public final double getVaccinationRate() {
+<span class="fc" id="L46">    	return this.VaccinationRate;</span>
+    }
+    /**
+	 * Getter method to get the string version of vaccinations rate of this record
+	 * @return		The vaccinations rate of this record
+	 */
+    public final String getRateInPercentage() {
+<span class="fc" id="L53">    	return this.RateInPercentage;</span>
+    }
+    /**
+	 * Getter method to get the string version of the total number people fully vaccinated of this record
+	 * @return		The vaccinations rate of this record
+	 */
+    public final String getNumString() {
+<span class="fc" id="L60">    	return this.NumString;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RequestOverPeriod.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.model</a> &gt; <span class="el_source">RequestOverPeriod.java</span></div><h1>RequestOverPeriod.java</h1><pre class="source lang-java linenums">package comp3111.covid.model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The implementation of Request for a request over a specific period
+ */
+public class RequestOverPeriod extends Request {
+<span class="fc" id="L10">	private List&lt;String&gt;listCountry = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L11">	private List&lt;PeriodRecord&gt; listRecord= new ArrayList&lt;PeriodRecord&gt;();</span>
+	private Period period;
+	
+	/**
+	 * Constructor to create a RequestOnDate object containing a {@link PeriodRecord} instance
+	 * @param listCountry		The list of countries of interest
+	 * @param period			The {@link Period} instance of period of interest
+	 * @param type				The type of record requested:
+	 * 							1 for {@link DeathRecord}
+	 * 							2 for {@link ConfirmedCaseRecord}
+	 * 							3 for {@link VaccinationRecord}
+	 */
+<span class="fc" id="L23">	public RequestOverPeriod(ArrayList&lt;String&gt;listCountry, Period period, int type) {</span>
+<span class="fc" id="L24">		this.listCountry = listCountry;</span>
+<span class="fc" id="L25">		this.period = period;</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">		if(type == 1) {//Death</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">			for(var c: listCountry) {</span>
+<span class="fc" id="L28">				listRecord.add(new DeathPeriodRecord(c,period));</span>
+<span class="fc" id="L29">			}</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">		}else if(type == 2) {//ConfirmedCase</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">			for(var c: listCountry) {</span>
+<span class="fc" id="L32">				listRecord.add(new ConfirmedCasePeriodRecord(c,period));</span>
+<span class="fc" id="L33">			}</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">		}else if(type == 3) {//vaccination</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">			for(var c: listCountry) {</span>
+<span class="fc" id="L36">				listRecord.add(new VaccinationPeriodRecord(c,period));</span>
+<span class="fc" id="L37">			}</span>
+		}
+		
+<span class="fc" id="L40">	}</span>
+	
+	/**
+	 * Getter method to get the record for a specific country on a specific date
+	 * @param country		The country of the required record
+	 * @param period		The period of the required record
+	 * @return				The instance of {@link PeriodRecord} of the required record
+	 */
+	public PeriodRecord getPeriodRecord(String country, Period period) {
+<span class="fc" id="L49">		int idxc = listCountry.indexOf(country);</span>
+<span class="fc" id="L50">		return listRecord.get(idxc);</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

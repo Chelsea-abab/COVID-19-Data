@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MapTask.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.view</a> &gt; <span class="el_source">MapTask.java</span></div><h1>MapTask.java</h1><pre class="source lang-java linenums">package comp3111.covid.view;
+
+import javafx.stage.Stage;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
+
+import java.util.List;
+import java.util.ArrayList;
+
+/**
+ * Provide map generating service for the honor track tasks
+ */
+<span class="nc" id="L16">public class MapTask {</span>
+	
+	/**
+	 * Generate the map on a new stage for a given list of countries and data
+	 * @param countries		The list of countries of interest in this task
+	 * @param data			The list of data to be used to generate map
+	 * @param date			The date of interest in the standard form of the dataset
+	 * @param dataType		The type name of the data to be shown on the map
+	 */
+	public static void GenerateMap(ArrayList&lt;String&gt; countries, ArrayList&lt;? extends Number&gt; data, String date, String dataType) {
+<span class="nc" id="L26">		Stage anotherStage = new Stage();</span>
+<span class="nc" id="L27">		anotherStage.setTitle(&quot;World Map of COVID-19 Confirmed Cases on &quot; + date);</span>
+<span class="nc" id="L28">        WebView webView = new WebView();</span>
+		
+<span class="nc" id="L30">		String content = &quot;&lt;html&gt;\r\n&quot;</span>
+        		+ &quot;  &lt;head&gt;\r\n&quot;
+        		+ &quot;    &lt;script type=\&quot;text/javascript\&quot; src=\&quot;https://www.gstatic.com/charts/loader.js\&quot;&gt;&lt;/script&gt;\r\n&quot;
+        		+ &quot;    &lt;script type=\&quot;text/javascript\&quot;&gt;\r\n&quot;
+        		+ &quot;      google.charts.load('current', {\r\n&quot;
+        		+ &quot;        'packages':['geochart'],\r\n&quot;
+        		+ &quot;      });\r\n&quot;
+        		+ &quot;      google.charts.setOnLoadCallback(drawRegionsMap);\r\n&quot;
+        		+ &quot;\r\n&quot;
+        		+ &quot;      function drawRegionsMap() {\r\n&quot;
+        		+ &quot;        var data = google.visualization.arrayToDataTable([\r\n&quot;
+        		+ &quot;          ['Country', '&quot; + dataType + &quot;'],\r\n&quot;;
+<span class="nc bnc" id="L42" title="All 2 branches missed.">		for (int i = 0; i &lt; countries.size(); i++)</span>
+		{       
+<span class="nc" id="L44">			content = content + &quot;          ['&quot; + countries.get(i) + &quot;', &quot; + data.get(i) + &quot;],\r\n&quot;;</span>
+		}
+<span class="nc" id="L46">			content = content</span>
+        		+ &quot;        ]);\r\n&quot;
+        		+ &quot;\r\n&quot;
+        		+ &quot;        var options = {};\r\n&quot;
+        		+ &quot;\r\n&quot;
+        		+ &quot;        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));\r\n&quot;
+        		+ &quot;\r\n&quot;
+        		+ &quot;        chart.draw(data, options);\r\n&quot;
+        		+ &quot;      }\r\n&quot;
+        		+ &quot;    &lt;/script&gt;\r\n&quot;
+        		+ &quot;  &lt;/head&gt;\r\n&quot;
+        		+ &quot;  &lt;body&gt;\r\n&quot;
+        		+ &quot;    &lt;div id=\&quot;regions_div\&quot; style=\&quot;width: 900px; height: 500px;\&quot;&gt;&lt;/div&gt;\r\n&quot;
+        		+ &quot;  &lt;/body&gt;\r\n&quot;
+        		+ &quot;&lt;/html&gt;&quot;;
+
+<span class="nc" id="L62">        webView.getEngine().loadContent(content);</span>
+
+<span class="nc" id="L64">        VBox vBox = new VBox(webView);</span>
+<span class="nc" id="L65">        Scene scene = new Scene(vBox, 960, 600);</span>
+
+<span class="nc" id="L67">        anotherStage.setScene(scene);</span>
+<span class="nc" id="L68">		anotherStage.show();</span>
+<span class="nc" id="L69">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

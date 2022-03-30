@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DateParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.util</a> &gt; <span class="el_source">DateParser.java</span></div><h1>DateParser.java</h1><pre class="source lang-java linenums">package comp3111.covid.util;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+/**
+ * Parse and validate the date of input, and convert to the standard format in the dataset
+ */
+<span class="nc" id="L10">public class DateParser {</span>
+	/**
+	 * Parse the input of the user and convert to a {@link java.util.Date} object
+	 * @param s		User input of the date
+	 * @return		A {@link java.util.Date} object on the input date
+	 */
+	public static Date transformToDate(String s) {
+<span class="fc" id="L17">		Date date=null;</span>
+<span class="fc" id="L18">		String year=&quot;&quot;,month=&quot;&quot;,day=&quot;&quot;;</span>
+<span class="fc" id="L19">		int commaIndex=0;</span>
+<span class="fc bfc" id="L20" title="All 2 branches covered.">		for(int i=0;i&lt;s.length();i++) {</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">			if(s.charAt(i)==',')</span>
+<span class="fc" id="L22">				commaIndex=i;</span>
+		}
+<span class="fc bfc" id="L24" title="All 4 branches covered.">		if(commaIndex!=5 &amp;&amp; commaIndex!=6)</span>
+<span class="fc" id="L25">			return date;</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">		if(s.charAt(commaIndex+5)=='1') {</span>
+<span class="fc" id="L27">			year=&quot;2021&quot;;</span>
+		}
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">		else if(s.charAt(commaIndex+5)=='0') {</span>
+<span class="fc" id="L30">			year=&quot;2020&quot;;</span>
+		}
+<span class="pc bpc" id="L32" title="1 of 6 branches missed.">		if(s.charAt(0)=='J' &amp;&amp; s.charAt(1)=='a' &amp;&amp; s.charAt(2)=='n') {</span>
+<span class="fc" id="L33">			month=&quot;01&quot;;</span>
+		}
+<span class="pc bpc" id="L35" title="2 of 6 branches missed.">		if(s.charAt(0)=='F' &amp;&amp; s.charAt(1)=='e' &amp;&amp; s.charAt(2)=='b') {</span>
+<span class="fc" id="L36">			month=&quot;02&quot;;</span>
+		}
+<span class="pc bpc" id="L38" title="1 of 6 branches missed.">		if(s.charAt(0)=='M' &amp;&amp; s.charAt(1)=='a' &amp;&amp; s.charAt(2)=='r') {</span>
+<span class="fc" id="L39">			month=&quot;03&quot;;</span>
+		}
+<span class="pc bpc" id="L41" title="1 of 6 branches missed.">		if(s.charAt(0)=='A' &amp;&amp; s.charAt(1)=='p' &amp;&amp; s.charAt(2)=='r') {</span>
+<span class="fc" id="L42">			month=&quot;04&quot;;</span>
+		}
+<span class="pc bpc" id="L44" title="1 of 6 branches missed.">		if(s.charAt(0)=='M' &amp;&amp; s.charAt(1)=='a' &amp;&amp; s.charAt(2)=='y') {</span>
+<span class="fc" id="L45">			month=&quot;05&quot;;</span>
+		}
+<span class="fc bfc" id="L47" title="All 6 branches covered.">		if(s.charAt(0)=='J' &amp;&amp; s.charAt(1)=='u' &amp;&amp; s.charAt(2)=='n') {</span>
+<span class="fc" id="L48">			month=&quot;06&quot;;</span>
+		}
+<span class="fc bfc" id="L50" title="All 6 branches covered.">		if(s.charAt(0)=='J' &amp;&amp; s.charAt(1)=='u' &amp;&amp; s.charAt(2)=='l') {</span>
+<span class="fc" id="L51">			month=&quot;07&quot;;</span>
+		}
+<span class="pc bpc" id="L53" title="1 of 6 branches missed.">		if(s.charAt(0)=='A' &amp;&amp; s.charAt(1)=='u' &amp;&amp; s.charAt(2)=='g') {</span>
+<span class="fc" id="L54">			month=&quot;08&quot;;</span>
+		}
+<span class="pc bpc" id="L56" title="2 of 6 branches missed.">		if(s.charAt(0)=='S' &amp;&amp; s.charAt(1)=='e' &amp;&amp; s.charAt(2)=='p') {</span>
+<span class="fc" id="L57">			month=&quot;09&quot;;</span>
+		}
+<span class="pc bpc" id="L59" title="2 of 6 branches missed.">		if(s.charAt(0)=='O' &amp;&amp; s.charAt(1)=='c' &amp;&amp; s.charAt(2)=='t') {</span>
+<span class="fc" id="L60">			month=&quot;10&quot;;</span>
+		}
+<span class="pc bpc" id="L62" title="2 of 6 branches missed.">		if(s.charAt(0)=='N' &amp;&amp; s.charAt(1)=='o' &amp;&amp; s.charAt(2)=='v') {</span>
+<span class="fc" id="L63">			month=&quot;11&quot;;</span>
+		}
+<span class="pc bpc" id="L65" title="2 of 6 branches missed.">		if(s.charAt(0)=='D' &amp;&amp; s.charAt(1)=='e' &amp;&amp; s.charAt(2)=='c') {</span>
+<span class="fc" id="L66">			month=&quot;12&quot;;</span>
+		}
+<span class="fc" id="L68">		day=s.substring(4,commaIndex);</span>
+<span class="pc bpc" id="L69" title="3 of 6 branches missed.">		if(year==&quot;&quot; || month==&quot;&quot; || day==&quot;&quot;)</span>
+<span class="nc" id="L70">			return date;</span>
+<span class="fc" id="L71">		String result=year+&quot;-&quot;+month+&quot;-&quot;+day;</span>
+		//System.out.println(&quot;3921???&quot;);
+		//System.out.println(result);
+		//java.text.SimpleDateFormat formatter = new SimpleDateFormat( &quot;yyyy-MM-dd &quot;);
+		//System.out.println(Integer.parseInt(year));
+		//System.out.println(Integer.parseInt(month));
+		//System.out.println(Integer.parseInt(day));
+<span class="fc" id="L78">		date = new Date(Integer.parseInt(year) - 1900, Integer.parseInt(month) - 1, Integer.parseInt(day));</span>
+		//System.out.println(date);
+		/*try {
+			date = formatter.parse(result);
+		} catch (ParseException e) {
+			System.out.println(&quot;transformToDate ERROR!&quot;);
+
+		}*/
+<span class="fc" id="L86">		return date;</span>
+	}
+	/**
+	 * Validate the user input to check whether the input is in the correct format
+	 * @param s			User input of the date
+	 * @return			a boolean variable indicate whether the input is in correct format
+	 */
+	public static boolean isValidDate(String s) {
+<span class="fc bfc" id="L94" title="All 4 branches covered.">		if(s.length()!=11 &amp;&amp; s.length()!=12)</span>
+<span class="fc" id="L95">			return false;</span>
+		//check month
+<span class="fc" id="L97">		boolean validMonth=false;</span>
+<span class="pc bpc" id="L98" title="3 of 12 branches missed.">		if((s.charAt(0)=='J' &amp;&amp; s.charAt(1)=='a' &amp;&amp; s.charAt(2)=='n')||(s.charAt(0)=='F' &amp;&amp; s.charAt(1)=='e' &amp;&amp; s.charAt(2)=='b')||</span>
+<span class="pc bpc" id="L99" title="2 of 12 branches missed.">		   (s.charAt(0)=='M' &amp;&amp; s.charAt(1)=='a' &amp;&amp; s.charAt(2)=='r')||(s.charAt(0)=='A' &amp;&amp; s.charAt(1)=='p' &amp;&amp; s.charAt(2)=='r')||</span>
+<span class="pc bpc" id="L100" title="3 of 12 branches missed.">		   (s.charAt(0)=='M' &amp;&amp; s.charAt(1)=='a' &amp;&amp; s.charAt(2)=='y')||(s.charAt(0)=='J' &amp;&amp; s.charAt(1)=='u' &amp;&amp; s.charAt(2)=='n')||</span>
+<span class="pc bpc" id="L101" title="3 of 12 branches missed.">		   (s.charAt(0)=='J' &amp;&amp; s.charAt(1)=='u' &amp;&amp; s.charAt(2)=='l')||(s.charAt(0)=='A' &amp;&amp; s.charAt(1)=='u' &amp;&amp; s.charAt(2)=='g')||</span>
+<span class="pc bpc" id="L102" title="4 of 12 branches missed.">		   (s.charAt(0)=='S' &amp;&amp; s.charAt(1)=='e' &amp;&amp; s.charAt(2)=='p')||(s.charAt(0)=='O' &amp;&amp; s.charAt(1)=='c' &amp;&amp; s.charAt(2)=='t')||</span>
+<span class="pc bpc" id="L103" title="4 of 12 branches missed.">		   (s.charAt(0)=='N' &amp;&amp; s.charAt(1)=='o' &amp;&amp; s.charAt(2)=='v')||(s.charAt(0)=='D' &amp;&amp; s.charAt(1)=='e' &amp;&amp; s.charAt(2)=='c')) {</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">			if(s.charAt(3)==' ') {</span>
+<span class="fc" id="L105">				validMonth=true;</span>
+			}
+		}
+<span class="fc bfc" id="L108" title="All 2 branches covered.">		if(validMonth==false)</span>
+<span class="fc" id="L109">			return false;</span>
+		//check day number
+<span class="fc" id="L111">		boolean validDay=false;</span>
+<span class="fc" id="L112">		int commaIndex=0;</span>
+<span class="fc" id="L113">		int commaCount=0;</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">		for(int i=0;i&lt;s.length();i++) {</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">			if(s.charAt(i)==',') {</span>
+<span class="fc" id="L116">				commaIndex=i;</span>
+<span class="fc" id="L117">				commaCount++;</span>
+			}
+		}
+<span class="fc bfc" id="L120" title="All 2 branches covered.">		if(commaCount!=1)</span>
+<span class="fc" id="L121">			return false;</span>
+<span class="pc bpc" id="L122" title="1 of 4 branches missed.">		if(commaIndex!=5 &amp;&amp; commaIndex!=6)</span>
+<span class="nc" id="L123">			return false;</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">		if(commaIndex==6) {</span>
+<span class="pc bpc" id="L125" title="2 of 8 branches missed.">			if(s.charAt(4)&gt;='0' &amp;&amp; s.charAt(4)&lt;='9' &amp;&amp; s.charAt(5)&gt;='0' &amp;&amp; s.charAt(5)&lt;='9') {</span>
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">				if(s.charAt(7)==' ')</span>
+<span class="fc" id="L127">					validDay=true;</span>
+			}
+		}
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">		else if(commaIndex==5) {</span>
+<span class="pc bpc" id="L131" title="1 of 4 branches missed.">			if(s.charAt(4)&gt;='0' &amp;&amp; s.charAt(4)&lt;='9') {</span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">				if(s.charAt(6)==' ')</span>
+<span class="fc" id="L133">					validDay=true;</span>
+			}
+		}
+		//check year
+<span class="fc" id="L137">		boolean validYear=false;</span>
+<span class="pc bpc" id="L138" title="2 of 10 branches missed.">		if(s.charAt(commaIndex+2)=='2' &amp;&amp; s.charAt(commaIndex+3)=='0' &amp;&amp; s.charAt(commaIndex+4)=='2' &amp;&amp; (s.charAt(commaIndex+5)=='0' || s.charAt(commaIndex+5)=='1')) {</span>
+<span class="fc" id="L139">			validYear=true;</span>
+		}
+<span class="pc bpc" id="L141" title="1 of 6 branches missed.">		if(validYear &amp;&amp; validMonth &amp;&amp; validDay)</span>
+<span class="fc" id="L142">			return true;</span>
+		else
+<span class="fc" id="L144">			return false;</span>
+	}
+	
+	/**
+	 * Validate the user input to check whether the input is within legal range
+	 * @param s			User input of the date
+	 * @return			a boolean variable indicate whether the input is within legal range
+	 */
+	public static boolean isDateWithinRange(String s) {//true==in range     false==out of range
+<span class="fc bfc" id="L153" title="All 2 branches covered.">		if(isValidDate(s)) {</span>
+<span class="fc" id="L154">			int commaIndex=0;</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">			for(int i=0;i&lt;s.length();i++) {</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">				if(s.charAt(i)==',')</span>
+<span class="fc" id="L157">					commaIndex=i;</span>
+			}
+<span class="fc" id="L159">			String day=s.substring(4,commaIndex);</span>
+<span class="fc" id="L160">			int dayNum=Integer.valueOf(day).intValue();</span>
+<span class="fc" id="L161">			boolean isDayInRange=false;</span>
+<span class="pc bpc" id="L162" title="1 of 6 branches missed.">			if(s.charAt(0)=='J' &amp;&amp; s.charAt(1)=='a' &amp;&amp; s.charAt(2)=='n') {</span>
+<span class="fc bfc" id="L163" title="All 6 branches covered.">				if (s.charAt(commaIndex + 5) == '1' &amp;&amp; dayNum &gt;= 1 &amp;&amp; dayNum &lt;= 31)</span>
+<span class="fc" id="L164">					isDayInRange=true;</span>
+			}
+<span class="pc bpc" id="L166" title="2 of 8 branches missed.">			if(s.charAt(commaIndex + 5)=='1' &amp;&amp; s.charAt(0)=='F' &amp;&amp; s.charAt(1)=='e' &amp;&amp; s.charAt(2)=='b') {</span>
+<span class="fc bfc" id="L167" title="All 4 branches covered.">				if(dayNum&gt;=1 &amp;&amp; dayNum&lt;=28)</span>
+<span class="fc" id="L168">					isDayInRange=true;</span>
+			}
+<span class="pc bpc" id="L170" title="1 of 6 branches missed.">			if(s.charAt(0)=='M' &amp;&amp; s.charAt(1)=='a' &amp;&amp; s.charAt(2)=='r') {</span>
+<span class="fc bfc" id="L171" title="All 4 branches covered.">				if(dayNum&gt;=1 &amp;&amp; dayNum&lt;=31)</span>
+<span class="fc" id="L172">					isDayInRange=true;</span>
+			}
+<span class="pc bpc" id="L174" title="1 of 6 branches missed.">			if(s.charAt(0)=='A' &amp;&amp; s.charAt(1)=='p' &amp;&amp; s.charAt(2)=='r') {</span>
+<span class="fc bfc" id="L175" title="All 4 branches covered.">				if(dayNum&gt;=1 &amp;&amp; dayNum&lt;=30)</span>
+<span class="fc" id="L176">					isDayInRange=true;</span>
+			}
+<span class="pc bpc" id="L178" title="1 of 6 branches missed.">			if(s.charAt(0)=='M' &amp;&amp; s.charAt(1)=='a' &amp;&amp; s.charAt(2)=='y') {</span>
+<span class="fc bfc" id="L179" title="All 4 branches covered.">				if(dayNum&gt;=1 &amp;&amp; dayNum&lt;=31)</span>
+<span class="fc" id="L180">					isDayInRange=true;</span>
+			}
+<span class="fc bfc" id="L182" title="All 6 branches covered.">			if(s.charAt(0)=='J' &amp;&amp; s.charAt(1)=='u' &amp;&amp; s.charAt(2)=='n') {</span>
+<span class="fc bfc" id="L183" title="All 4 branches covered.">				if(dayNum&gt;=1 &amp;&amp; dayNum&lt;=30)</span>
+<span class="fc" id="L184">					isDayInRange=true;</span>
+			}
+<span class="fc bfc" id="L186" title="All 6 branches covered.">			if(s.charAt(0)=='J' &amp;&amp; s.charAt(1)=='u' &amp;&amp; s.charAt(2)=='l') {</span>
+<span class="pc bpc" id="L187" title="1 of 6 branches missed.">				if((s.charAt(commaIndex + 5) == '1' &amp;&amp; dayNum &gt;= 1 &amp;&amp; dayNum &lt;= 20) ||</span>
+<span class="pc bpc" id="L188" title="1 of 6 branches missed.">						(s.charAt(commaIndex + 5) == '0' &amp;&amp; dayNum &gt;= 1 &amp;&amp; dayNum &lt;= 31))</span>
+<span class="fc" id="L189">					isDayInRange=true;</span>
+			}
+<span class="pc bpc" id="L191" title="1 of 6 branches missed.">			if(s.charAt(0)=='A' &amp;&amp; s.charAt(1)=='u' &amp;&amp; s.charAt(2)=='g') {</span>
+<span class="fc bfc" id="L192" title="All 6 branches covered.">				if(s.charAt(commaIndex + 5) == '0' &amp;&amp; dayNum&gt;=1 &amp;&amp; dayNum&lt;=31)</span>
+<span class="fc" id="L193">					isDayInRange=true;</span>
+			}
+<span class="pc bpc" id="L195" title="2 of 6 branches missed.">			if(s.charAt(0)=='S' &amp;&amp; s.charAt(1)=='e' &amp;&amp; s.charAt(2)=='p') {</span>
+<span class="fc bfc" id="L196" title="All 6 branches covered.">				if(s.charAt(commaIndex + 5) == '0' &amp;&amp; dayNum&gt;=1 &amp;&amp; dayNum&lt;=30)</span>
+<span class="fc" id="L197">					isDayInRange=true;</span>
+			}
+<span class="pc bpc" id="L199" title="2 of 6 branches missed.">			if(s.charAt(0)=='O' &amp;&amp; s.charAt(1)=='c' &amp;&amp; s.charAt(2)=='t') {</span>
+<span class="fc bfc" id="L200" title="All 6 branches covered.">				if(s.charAt(commaIndex + 5) == '0' &amp;&amp; dayNum&gt;=1 &amp;&amp; dayNum&lt;=31)</span>
+<span class="fc" id="L201">					isDayInRange=true;</span>
+			}
+<span class="pc bpc" id="L203" title="2 of 6 branches missed.">			if(s.charAt(0)=='N' &amp;&amp; s.charAt(1)=='o' &amp;&amp; s.charAt(2)=='v') {</span>
+<span class="fc bfc" id="L204" title="All 6 branches covered.">				if(s.charAt(commaIndex + 5) == '0' &amp;&amp; dayNum&gt;=1 &amp;&amp; dayNum&lt;=30)</span>
+<span class="fc" id="L205">					isDayInRange=true;</span>
+			}
+<span class="pc bpc" id="L207" title="2 of 6 branches missed.">			if(s.charAt(0)=='D' &amp;&amp; s.charAt(1)=='e' &amp;&amp; s.charAt(2)=='c') {</span>
+<span class="fc bfc" id="L208" title="All 6 branches covered.">				if(s.charAt(commaIndex + 5) == '0' &amp;&amp; dayNum&gt;=1 &amp;&amp; dayNum&lt;=31)</span>
+<span class="fc" id="L209">					isDayInRange=true;</span>
+			}
+<span class="fc bfc" id="L211" title="All 2 branches covered.">			if(isDayInRange)</span>
+<span class="fc" id="L212">				return true;</span>
+			else
+<span class="fc" id="L214">				return false;</span>
+		}
+		else
+<span class="fc" id="L217">			return false;</span>
+	}
+	
+	/**
+	 * Parse the input of the user and convert to the standard form of the dataset
+	 * @param s		User input of the date
+	 * @return		A String of the date in standard form of the dataset
+	 */
+	public static String transformToDateString(String s) {
+<span class="fc" id="L226">		  Date date=transformToDate(s);</span>
+<span class="fc bfc" id="L227" title="All 2 branches covered.">		  if(date==null)</span>
+<span class="fc" id="L228">			  return null;</span>
+		  //System.out.println(&quot;start&quot;);
+		  //System.out.println(s);
+		  //System.out.println(date.toString());
+		  String res;
+<span class="fc" id="L233">		  SimpleDateFormat sdf = new SimpleDateFormat(&quot;M/d/yyyy&quot;);</span>
+<span class="fc" id="L234">		  res = sdf.format(date);</span>
+		  //System.out.println(res);
+<span class="fc" id="L236">		  return res;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataAnalysis.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid</a> &gt; <span class="el_source">DataAnalysis.java</span></div><h1>DataAnalysis.java</h1><pre class="source lang-java linenums">package comp3111.covid;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.csv.*;
+import java.time.LocalDate;
+import edu.duke.*;
+import java.util.stream.Collectors;
+
+/**
+ * 
+ * Data Explorer on COVID-19
+ * @author &lt;a href=mailto:namkiu@ust.hk&gt;Namkiu Chan&lt;/a&gt;
+ * @version	1.1
+ * 
+ */
+<span class="nc" id="L18">public class DataAnalysis {</span>
+ 
+	/**
+	 * Helper method to get the {@link org.apache.commons.csv.CSVParser} object for a dataset to be used
+	 * @param dataset		The dataset to be used
+	 * @return				The {@link org.apache.commons.csv.CSVParser} object
+	 */
+	public static CSVParser getFileParser(String dataset) {
+<span class="fc" id="L26">	     FileResource fr = new FileResource(&quot;dataset/&quot; + dataset);</span>
+<span class="fc" id="L27">	     return fr.getCSVParser(true);</span>
+		}
+	
+	/**
+	 * Helper method to get the list of all countries in the dataset
+	 * @param dataset		The dataset to be used
+	 * @return				The list of all countries in the dataset
+	 */
+	public static List&lt;String&gt; getCountryList(String dataset) {
+<span class="fc" id="L36">		String iso_code = &quot;&quot;;</span>
+<span class="fc" id="L37">		List&lt;String&gt; name = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">		for (CSVRecord rec : getFileParser(dataset)) {</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">			if (!(rec.get(&quot;iso_code&quot;).equals(iso_code))) {</span>
+<span class="fc" id="L40">				iso_code = rec.get(&quot;iso_code&quot;);</span>
+<span class="fc" id="L41">				name.add(rec.get(&quot;location&quot;));</span>
+			}
+<span class="fc" id="L43">		}</span>
+<span class="fc" id="L44">		return name;</span>
+	}
+	
+	/**
+	 * Get the required value of specified feature from the data set
+	 * @param dataset		The dataset to be used
+	 * @param feature		The name of the feature required
+	 * @param country		The country of interest
+	 * @param date			The date of interest in the standard form of the dataset
+	 * @return				The value of the feature on the date for the country
+	 */
+	public static Double getFeature(String dataset, String feature, String country, String date) {
+<span class="fc" id="L56">		String result = &quot;&quot;;</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">		for (CSVRecord rec : getFileParser(dataset)) {</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">			if (rec.get(&quot;location&quot;).equals(country)) {</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">				if (rec.get(&quot;date&quot;).equals(date))</span>
+<span class="fc" id="L60">					result = rec.get(feature);</span>
+			}
+<span class="fc" id="L62">		}</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">		if (result.equals(&quot;&quot;))</span>
+<span class="fc" id="L64">			return 0.0;</span>
+		else
+<span class="fc" id="L66">			return Double.parseDouble(result);</span>
+	}
+
+	/**
+	 * Helper function to get the first date that has data for a country
+	 * @param country		The country of interest
+	 * @return				The first date that has data for the country
+	 */
+	public static String getStartDate(String country) {
+		
+<span class="fc bfc" id="L76" title="All 2 branches covered.">		for (CSVRecord rec : getFileParser(&quot;COVID_Dataset_v1.0.csv&quot;)) {</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">			if (rec.get(&quot;location&quot;).equals(country)) {</span>
+<span class="fc" id="L78">				System.out.println(rec.get(&quot;date&quot;));</span>
+<span class="fc" id="L79">				return rec.get(&quot;date&quot;);</span>
+			}
+<span class="fc" id="L81">		}</span>
+<span class="fc" id="L82">		return null;</span>
+	}
+	
+	/**
+	 * Helper function to compare two dates
+	 * @param date1			The first date in the standard form of the dataset
+	 * @param date2			The second date in the standard form of the dataset
+	 * @return			The difference of days for the two dates if date 1 is later than date 2, 0 otherwise
+	 */
+	public static int laterthan(String date1, String date2) {
+<span class="fc" id="L92">		System.out.println(&quot;start date is &quot; + date1);</span>
+<span class="fc" id="L93">		System.out.println(&quot;end date is &quot; + date2);</span>
+<span class="fc" id="L94">		String[] starts = date1.split(&quot;/&quot;);</span>
+<span class="fc" id="L95">		String[] ends = date2.split(&quot;/&quot;);</span>
+<span class="fc" id="L96">		int startDay = Integer.valueOf(starts[1]);</span>
+<span class="fc" id="L97">		int startMonth = Integer.valueOf(starts[0]);</span>
+<span class="fc" id="L98">		int startYr = Integer.valueOf(starts[2]);</span>
+<span class="fc" id="L99">		int endDay = Integer.valueOf(ends[1]);</span>
+<span class="fc" id="L100">		int endMonth = Integer.valueOf(ends[0]);</span>
+<span class="fc" id="L101">		int endYr = Integer.valueOf(ends[2]);</span>
+<span class="fc" id="L102">		LocalDate firstdate = LocalDate.of(startYr,startMonth,startDay);</span>
+<span class="fc" id="L103">		LocalDate seconddate = LocalDate.of(endYr,endMonth,endDay);</span>
+<span class="fc" id="L104">		System.out.println(firstdate.isAfter(seconddate));</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">		if(firstdate.isAfter(seconddate)) {</span>
+<span class="fc" id="L106">			List&lt;LocalDate&gt; listOfDates = seconddate.datesUntil(firstdate)</span>
+<span class="fc" id="L107">	                .collect(Collectors.toList());</span>
+<span class="fc" id="L108">			System.out.println(&quot;time diff here is &quot; + listOfDates.size());</span>
+<span class="fc" id="L109">			return listOfDates.size();</span>
+		}
+		else
+<span class="fc" id="L112">			return 0;</span>
+	}
+
+	/**
+	 * Get the confirmed case data for task 0
+	 * @param dataset		The dataset to be used
+	 * @param iso_code		The iso_code specifing the country of interest
+	 * @return			The report of the confirmed case data of the country to be shown in task 0
+	 */
+	public static String getConfirmedCases(String dataset, String iso_code) {
+<span class="fc" id="L122">		String oReport = &quot;&quot;;	</span>
+<span class="fc" id="L123">		long confirmedCases = 0;</span>
+<span class="fc" id="L124">		long numRecord = 0;</span>
+<span class="fc" id="L125">		long totalNumRecord = 0;</span>
+		
+<span class="fc bfc" id="L127" title="All 2 branches covered.">		for (CSVRecord rec : getFileParser(dataset)) {</span>
+			
+<span class="fc bfc" id="L129" title="All 2 branches covered.">			if (rec.get(&quot;iso_code&quot;).equals(iso_code)) {</span>
+<span class="fc" id="L130">				String s = rec.get(&quot;new_cases&quot;);</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">				if (!s.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L132">					confirmedCases += Long.parseLong(s);</span>
+<span class="fc" id="L133">					numRecord++;</span>
+				}
+			}		
+<span class="fc" id="L136">			totalNumRecord++;</span>
+<span class="fc" id="L137">		}</span>
+		
+<span class="fc" id="L139">		oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);</span>
+<span class="fc" id="L140">		oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);</span>
+<span class="fc" id="L141">		oReport += String.format(&quot;Number of Confirmed Cases: %,d\n&quot;, confirmedCases);</span>
+<span class="fc" id="L142">		oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);</span>
+		
+<span class="fc" id="L144">		System.out.println(oReport);</span>
+<span class="fc" id="L145">		return oReport;</span>
+	}
+	
+	
+	/**
+	 * Get the death data for task 0
+	 * @param dataset		The dataset to be used
+	 * @param iso_code		The iso_code specifing the country of interest
+	 * @return			The report of the death data of the country to be shown in task 0
+	 */
+	public static String getConfirmedDeaths(String dataset, String iso_code) {
+<span class="fc" id="L156">			String oReport = &quot;&quot;;	</span>
+<span class="fc" id="L157">			long confirmedDeaths = 0;</span>
+<span class="fc" id="L158">			long numRecord = 0;</span>
+<span class="fc" id="L159">			long totalNumRecord = 0;</span>
+			
+<span class="fc bfc" id="L161" title="All 2 branches covered.">			for (CSVRecord rec : getFileParser(dataset)) {</span>
+				
+<span class="fc bfc" id="L163" title="All 2 branches covered.">				if (rec.get(&quot;iso_code&quot;).equals(iso_code)) {</span>
+<span class="fc" id="L164">					String s = rec.get(&quot;new_deaths&quot;);</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">					if (!s.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L166">						confirmedDeaths += Long.parseLong(s);</span>
+<span class="fc" id="L167">						numRecord++;</span>
+					}
+				}		
+<span class="fc" id="L170">				totalNumRecord++;</span>
+<span class="fc" id="L171">			}</span>
+			
+<span class="fc" id="L173">			oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);</span>
+<span class="fc" id="L174">			oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);</span>
+<span class="fc" id="L175">			oReport += String.format(&quot;Number of Deaths: %,d\n&quot;, confirmedDeaths);</span>
+<span class="fc" id="L176">			oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);</span>
+<span class="fc" id="L177">			System.out.println(oReport);</span>
+<span class="fc" id="L178">			return oReport;</span>
+	 }
+	 
+	
+	/**
+	 * Get the vaccination data for task 0
+	 * @param dataset		The dataset to be used
+	 * @param iso_code		The iso_code specifing the country of interest
+	 * @return			The report of the vaccination data of the country to be shown in task 0
+	 */
+	 public static String getRateOfVaccination(String dataset, String iso_code) {
+<span class="fc" id="L189">			String oReport = &quot;&quot;;	</span>
+<span class="fc" id="L190">			long fullyVaccinated = 0;</span>
+<span class="fc" id="L191">			long numRecord = 0;</span>
+<span class="fc" id="L192">			long totalNumRecord = 0;</span>
+<span class="fc" id="L193">			long population = 0;</span>
+<span class="fc" id="L194">			float rate = 0.0f;</span>
+						
+<span class="fc bfc" id="L196" title="All 2 branches covered.">			for (CSVRecord rec : getFileParser(dataset)) {</span>
+				
+<span class="fc bfc" id="L198" title="All 2 branches covered.">				if (rec.get(&quot;iso_code&quot;).equals(iso_code)) {</span>
+					
+<span class="fc" id="L200">					String s1 = rec.get(&quot;people_fully_vaccinated&quot;);</span>
+<span class="fc" id="L201">					String s2 = rec.get(&quot;population&quot;);		</span>
+<span class="pc bpc" id="L202" title="1 of 4 branches missed.">					if (!s1.equals(&quot;&quot;) &amp;&amp; !s2.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L203">						fullyVaccinated = Long.parseLong(s1);</span>
+<span class="fc" id="L204">						population = Long.parseLong(s2);						</span>
+<span class="fc" id="L205">						numRecord++;</span>
+					}
+				}		
+<span class="fc" id="L208">				totalNumRecord++;</span>
+<span class="fc" id="L209">			}</span>
+			
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">			if (population !=0)</span>
+<span class="fc" id="L212">				rate = (float) fullyVaccinated / population * 100;</span>
+			
+<span class="fc" id="L214">			oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);</span>
+<span class="fc" id="L215">			oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);</span>
+<span class="fc" id="L216">			oReport += String.format(&quot;Number of People Fully Vaccinated: %,d\n&quot;, fullyVaccinated);</span>
+<span class="fc" id="L217">			oReport += String.format(&quot;Population: %,d\n&quot;, population);</span>
+<span class="fc" id="L218">			oReport += String.format(&quot;Rate of Vaccination: %.2f%%\n&quot;, rate);</span>
+<span class="fc" id="L219">			oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);</span>
+<span class="fc" id="L220">			System.out.println(oReport);</span>
+<span class="fc" id="L221">			return oReport;</span>
+	 }
+
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	/**
+	 * Get the total confirmed case data for a country on a specific date
+	 * @param dataset		The dataset to be used
+	 * @param country		The country of interest
+	 * @param date			The date of interest in the standard form of the dataset
+	 * @return			The value of total confirmed cases on the date for the country
+	 */
+	public static long getConfirmedCasesa(String dataset, String country, String date) {
+//		String oReport = &quot;&quot;;	
+<span class="fc" id="L242">		long confirmedCases = 0;</span>
+		
+<span class="fc bfc" id="L244" title="All 2 branches covered.">		for (CSVRecord rec : getFileParser(dataset)) {</span>
+			
+<span class="fc bfc" id="L246" title="All 2 branches covered.">			if (rec.get(&quot;location&quot;).equals(country)) {</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">				if(rec.get(&quot;date&quot;).equals(date)) {</span>
+<span class="fc" id="L248">					String s = rec.get(&quot;total_cases&quot;);</span>
+<span class="pc bpc" id="L249" title="1 of 2 branches missed.">					if(s != &quot;&quot;)</span>
+<span class="fc" id="L250">						confirmedCases = Long.parseLong(s);</span>
+				}
+//				String s = rec.get(&quot;new_cases&quot;);
+//				if (!s.equals(&quot;&quot;)) {
+//					confirmedCases += Long.parseLong(s);
+//					numRecord++;
+//				}
+			}		
+//			totalNumRecord++;
+<span class="fc" id="L259">		}</span>
+		
+//		oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);
+//		oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);
+//		oReport += String.format(&quot;Number of Confirmed Cases: %,d\n&quot;, confirmedCases);
+//		oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);
+//		
+<span class="fc" id="L266">		return confirmedCases;</span>
+	}
+	
+	
+	/**
+	 * Get the standardized total confirmed case data for a country on a specific date
+	 * @param dataset		The dataset to be used
+	 * @param country		The country of interest
+	 * @param date			The date of interest in the standard form of the dataset
+	 * @return			The value of standardized total confirmed cases on the date for the country
+	 */
+	public static double getConfirmedCasesStandarded(String dataset, String country, String date) {
+//		String oReport = &quot;&quot;;	
+<span class="fc" id="L279">		double confirmedCases = 0;</span>
+		
+<span class="fc bfc" id="L281" title="All 2 branches covered.">		for (CSVRecord rec : getFileParser(dataset)) {</span>
+			
+<span class="fc bfc" id="L283" title="All 2 branches covered.">			if (rec.get(&quot;location&quot;).equals(country)) {</span>
+<span class="fc bfc" id="L284" title="All 2 branches covered.">				if(rec.get(&quot;date&quot;).equals(date)) {</span>
+<span class="fc" id="L285">					String s = rec.get(&quot;total_cases&quot;);</span>
+<span class="pc bpc" id="L286" title="1 of 2 branches missed.">					if(s != &quot;&quot;)</span>
+<span class="fc" id="L287">						confirmedCases = Double.parseDouble(s);</span>
+				}
+//				String s = rec.get(&quot;new_cases&quot;);
+//				if (!s.equals(&quot;&quot;)) {
+//					confirmedCases += Long.parseLong(s);
+//					numRecord++;
+//				}
+			}		
+//			totalNumRecord++;
+<span class="fc" id="L296">		}</span>
+		
+//		oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);
+//		oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);
+//		oReport += String.format(&quot;Number of Confirmed Cases: %,d\n&quot;, confirmedCases);
+//		oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);
+//		
+<span class="fc" id="L303">		return confirmedCases;</span>
+	}
+	
+	
+	/**
+	 * Get the total confirmed case per 1M data for a country on a specific date
+	 * @param dataset		The dataset to be used
+	 * @param country		The country of interest
+	 * @param date			The date of interest in the standard form of the dataset
+	 * @return			The value of total confirmed cases per 1M on the date for the country
+	 */
+	public static double getConfirmedCasesPer(String dataset, String country, String date) {
+//		String oReport = &quot;&quot;;	
+<span class="fc" id="L316">		double confirmedCasesP = 0;</span>
+		
+<span class="fc bfc" id="L318" title="All 2 branches covered.">		for (CSVRecord rec : getFileParser(dataset)) {</span>
+			
+<span class="fc bfc" id="L320" title="All 2 branches covered.">			if (rec.get(&quot;location&quot;).equals(country)) {</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">				if(rec.get(&quot;date&quot;).equals(date)) {</span>
+<span class="fc" id="L322">					String s = rec.get(&quot;total_cases_per_million&quot;);</span>
+<span class="pc bpc" id="L323" title="1 of 2 branches missed.">					if(s != &quot;&quot;)</span>
+<span class="fc" id="L324">						confirmedCasesP = Double.parseDouble(s);</span>
+				}
+//				String s = rec.get(&quot;new_cases&quot;);
+//				if (!s.equals(&quot;&quot;)) {
+//					confirmedCases += Long.parseLong(s);
+//					numRecord++;
+//				}
+			}		
+//			totalNumRecord++;
+<span class="fc" id="L333">		}</span>
+		
+//		oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);
+//		oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);
+//		oReport += String.format(&quot;Number of Confirmed Cases: %,d\n&quot;, confirmedCases);
+//		oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);
+//		
+<span class="fc" id="L340">		return confirmedCasesP;</span>
+	}
+	
+	/**
+	 * Get the total confirmed case data for a country over a specific period
+	 * @param dataset		The dataset to be used
+	 * @param country		The country of interest
+	 * @param period		The {@link comp3111.covid.model.Period} instance of the period of interest
+	 * @return			The list of total confirmed cases for this country of each day within the period
+	 */
+	public static List&lt;Double&gt; getConfirmedCasesPerPeriod(String dataset, String country, comp3111.covid.model.Period period) {
+//		String oReport = &quot;&quot;;	
+<span class="fc" id="L352">		List&lt;Double&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L353">		List&lt;String&gt; dates = period.getDatesBetween();</span>
+		
+<span class="fc" id="L355">		int diff1 = laterthan(getStartDate(country),period.getstartDate());</span>
+<span class="fc" id="L356">		System.out.println(&quot;diff1 is &quot; + diff1);</span>
+<span class="fc bfc" id="L357" title="All 2 branches covered.">		for(int i = 0; i &lt; diff1; i++) {</span>
+<span class="fc" id="L358">			result.add(0.0);</span>
+		}
+		
+		
+		
+		
+<span class="fc bfc" id="L364" title="All 2 branches covered.">		for (CSVRecord rec : getFileParser(dataset)) {		</span>
+<span class="fc bfc" id="L365" title="All 2 branches covered.">			if (rec.get(&quot;location&quot;).equals(country)) {</span>
+<span class="fc bfc" id="L366" title="All 2 branches covered.">				if(dates.contains(rec.get(&quot;date&quot;))) {</span>
+<span class="fc" id="L367">					String s = rec.get(&quot;total_cases_per_million&quot;);</span>
+<span class="fc bfc" id="L368" title="All 2 branches covered.">					if(s != &quot;&quot;)</span>
+<span class="fc" id="L369">						result.add(Double.parseDouble(s));</span>
+					else
+<span class="fc" id="L371">						result.add(0.0);</span>
+<span class="fc" id="L372">					System.out.println(s + &quot;is added&quot;);</span>
+				}
+//				String s = rec.get(&quot;new_cases&quot;);
+//				if (!s.equals(&quot;&quot;)) {
+//					confirmedCases += Long.parseLong(s);
+//					numRecord++;
+//				}
+			}		
+//			totalNumRecord++;
+<span class="fc" id="L381">		}</span>
+<span class="fc bfc" id="L382" title="All 2 branches covered.">		if(result.size() &lt; dates.size()) {</span>
+<span class="fc bfc" id="L383" title="All 2 branches covered.">			for(int i = result.size(); i &lt; dates.size(); i ++) {</span>
+<span class="fc" id="L384">				result.add(0.0);</span>
+			}
+		}
+		
+//		oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);
+//		oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);
+//		oReport += String.format(&quot;Number of Confirmed Cases: %,d\n&quot;, confirmedCases);
+//		oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);
+//		
+<span class="fc" id="L393">		return result;</span>
+	}
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Get the total death data for a country on a specific date
+	 * @param dataset		The dataset to be used
+	 * @param country		The country of interest
+	 * @param date			The date of interest in the standard form of the dataset
+	 * @return			The value of total death on the date for the country
+	 */
+	 public static long getConfirmedDeathsa(String dataset, String country,String date) {
+//			String oReport = &quot;&quot;;	
+<span class="fc" id="L415">			long confirmedDeath = 0;</span>
+			
+<span class="fc bfc" id="L417" title="All 2 branches covered.">			for (CSVRecord rec : getFileParser(dataset)) {</span>
+				
+<span class="fc bfc" id="L419" title="All 2 branches covered.">				if (rec.get(&quot;location&quot;).equals(country)) {</span>
+<span class="fc bfc" id="L420" title="All 2 branches covered.">					if(rec.get(&quot;date&quot;).equals(date)) {</span>
+<span class="fc" id="L421">						String s = rec.get(&quot;total_deaths&quot;);</span>
+<span class="fc bfc" id="L422" title="All 2 branches covered.">						if(s != &quot;&quot;)</span>
+<span class="fc" id="L423">							confirmedDeath = Long.parseLong(s);</span>
+					}
+//					String s = rec.get(&quot;new_cases&quot;);
+//					if (!s.equals(&quot;&quot;)) {
+//						confirmedCases += Long.parseLong(s);
+//						numRecord++;
+//					}
+				}		
+//				totalNumRecord++;
+<span class="fc" id="L432">			}</span>
+			
+//			oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);
+//			oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);
+//			oReport += String.format(&quot;Number of Confirmed Cases: %,d\n&quot;, confirmedCases);
+//			oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);
+//			
+<span class="fc" id="L439">			return confirmedDeath;</span>
+	 }
+	 
+		/**
+		 * Get the total death per 1M data for a country on a specific date
+		 * @param dataset		The dataset to be used
+		 * @param country		The country of interest
+		 * @param date			The date of interest in the standard form of the dataset
+		 * @return			The value of total death per 1M on the date for the country
+		 */
+	 public static double getConfirmedDeathsPer(String dataset, String country,String date) {
+//			String oReport = &quot;&quot;;	
+<span class="fc" id="L451">			double confirmedDeathP = 0;</span>
+			
+<span class="fc bfc" id="L453" title="All 2 branches covered.">			for (CSVRecord rec : getFileParser(dataset)) {</span>
+				
+<span class="fc bfc" id="L455" title="All 2 branches covered.">				if (rec.get(&quot;location&quot;).equals(country)) {</span>
+<span class="fc bfc" id="L456" title="All 2 branches covered.">					if(rec.get(&quot;date&quot;).equals(date)) {</span>
+<span class="fc" id="L457">						String s = rec.get(&quot;total_deaths_per_million&quot;);</span>
+<span class="fc bfc" id="L458" title="All 2 branches covered.">						if(s != &quot;&quot;)</span>
+<span class="fc" id="L459">							confirmedDeathP = Double.parseDouble(s);</span>
+					}
+//					String s = rec.get(&quot;new_cases&quot;);
+//					if (!s.equals(&quot;&quot;)) {
+//						confirmedCases += Long.parseLong(s);
+//						numRecord++;
+//					}
+				}		
+//				totalNumRecord++;
+<span class="fc" id="L468">			}</span>
+			
+//			oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);
+//			oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);
+//			oReport += String.format(&quot;Number of Confirmed Cases: %,d\n&quot;, confirmedCases);
+//			oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);
+//			
+<span class="fc" id="L475">			return confirmedDeathP;</span>
+	 }
+	 
+		/**
+		 * Get the total death data for a country over a specific period
+		 * @param dataset		The dataset to be used
+		 * @param country		The country of interest
+		 * @param period		The {@link comp3111.covid.model.Period} instance of the period of interest
+		 * @return			The list of total death for this country of each day within the period
+		 */
+	public static List&lt;Double&gt; getDeathPerPeriod(String dataset, String country, comp3111.covid.model.Period period) {
+//			String oReport = &quot;&quot;;	
+<span class="fc" id="L487">			List&lt;Double&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L488">			List&lt;String&gt; dates = period.getDatesBetween();</span>
+			
+<span class="fc" id="L490">			int diff = laterthan(getStartDate(country),period.getstartDate());</span>
+<span class="fc bfc" id="L491" title="All 2 branches covered.">			for(int i = 0; i &lt; diff; i ++) {</span>
+<span class="fc" id="L492">				result.add(0.0);</span>
+			}
+<span class="fc bfc" id="L494" title="All 2 branches covered.">			for (CSVRecord rec : getFileParser(dataset)) {</span>
+				
+<span class="fc bfc" id="L496" title="All 2 branches covered.">				if (rec.get(&quot;location&quot;).equals(country)) {</span>
+<span class="fc bfc" id="L497" title="All 2 branches covered.">					if(dates.contains(rec.get(&quot;date&quot;))) {</span>
+<span class="fc" id="L498">						String s = rec.get(&quot;total_deaths&quot;);</span>
+<span class="fc bfc" id="L499" title="All 2 branches covered.">						if(s != &quot;&quot;)</span>
+<span class="fc" id="L500">							result.add(Double.parseDouble(s));</span>
+						else
+<span class="fc" id="L502">							result.add(0.0);</span>
+					}
+//					String s = rec.get(&quot;new_cases&quot;);
+//					if (!s.equals(&quot;&quot;)) {
+//						confirmedCases += Long.parseLong(s);
+//						numRecord++;
+//					}
+				}		
+//				totalNumRecord++;
+<span class="fc" id="L511">			}</span>
+<span class="fc bfc" id="L512" title="All 2 branches covered.">			if(result.size() &lt; dates.size()) {</span>
+<span class="fc bfc" id="L513" title="All 2 branches covered.">				for(int i = result.size(); i &lt; dates.size(); i ++) {</span>
+<span class="fc" id="L514">					result.add(0.0);</span>
+				}
+			}
+			
+//			oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);
+//			oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);
+//			oReport += String.format(&quot;Number of Confirmed Cases: %,d\n&quot;, confirmedCases);
+//			oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);
+//			
+<span class="fc" id="L523">			return result;</span>
+		}
+		
+		
+	
+	
+	
+	
+	
+	
+	/**
+	 * Get the people fully vaccinated data for a country on a specific date
+	 * @param dataset		The dataset to be used
+	 * @param country		The country of interest
+	 * @param date			The date of interest in the standard form of the dataset
+	 * @return			The value of people fully vaccinated on the date for the country
+	 */
+	 public static long getVaccinationa(String dataset, String country,String date) {
+//			String oReport = &quot;&quot;;	
+<span class="fc" id="L542">			long vaccination = 0;</span>
+			
+<span class="fc bfc" id="L544" title="All 2 branches covered.">			for (CSVRecord rec : getFileParser(dataset)) {</span>
+				
+<span class="fc bfc" id="L546" title="All 2 branches covered.">				if (rec.get(&quot;location&quot;).equals(country)) {</span>
+<span class="fc bfc" id="L547" title="All 2 branches covered.">					if(rec.get(&quot;date&quot;).equals(date)) {</span>
+<span class="fc" id="L548">						String s = rec.get(&quot;people_fully_vaccinated&quot;);</span>
+<span class="fc bfc" id="L549" title="All 2 branches covered.">						if(s != &quot;&quot;)</span>
+<span class="fc" id="L550">							vaccination = Long.parseLong(s);</span>
+					}
+//					String s = rec.get(&quot;new_cases&quot;);
+//					if (!s.equals(&quot;&quot;)) {
+//						confirmedCases += Long.parseLong(s);
+//						numRecord++;
+//					}
+				}		
+//				totalNumRecord++;
+<span class="fc" id="L559">			}</span>
+			
+//			oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);
+//			oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);
+//			oReport += String.format(&quot;Number of Confirmed Cases: %,d\n&quot;, confirmedCases);
+//			oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);
+//			
+<span class="fc" id="L566">			return vaccination;</span>
+	 }
+	 
+		/**
+		 * Get the standardized vaccination rate data for a country on a specific date
+		 * @param dataset		The dataset to be used
+		 * @param country		The country of interest
+		 * @param date			The date of interest in the standard form of the dataset
+		 * @return			The value of standardized vaccination rate on the date for the country
+		 */
+		public static double getVaccinationRateStandarded(String dataset, String country, String date) {
+//			String oReport = &quot;&quot;;	
+<span class="fc" id="L578">			double vaccinationRate = 0;</span>
+			
+<span class="fc bfc" id="L580" title="All 2 branches covered.">			for (CSVRecord rec : getFileParser(dataset)) {</span>
+				
+<span class="fc bfc" id="L582" title="All 2 branches covered.">				if (rec.get(&quot;location&quot;).equals(country)) {</span>
+<span class="fc bfc" id="L583" title="All 2 branches covered.">					if(rec.get(&quot;date&quot;).equals(date)) {</span>
+<span class="fc" id="L584">						String s = rec.get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
+<span class="fc bfc" id="L585" title="All 2 branches covered.">						if(s != &quot;&quot;)</span>
+<span class="fc" id="L586">							vaccinationRate = Double.parseDouble(s);</span>
+					}
+//					String s = rec.get(&quot;new_cases&quot;);
+//					if (!s.equals(&quot;&quot;)) {
+//						confirmedCases += Long.parseLong(s);
+//						numRecord++;
+//					}
+				}		
+//				totalNumRecord++;
+<span class="fc" id="L595">			}</span>
+			
+//			oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);
+//			oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);
+//			oReport += String.format(&quot;Number of Confirmed Cases: %,d\n&quot;, confirmedCases);
+//			oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);
+//			
+<span class="fc" id="L602">			return vaccinationRate;</span>
+		}
+		
+		/**
+		 * Get the vaccination rate data for a country on a specific date
+		 * @param dataset		The dataset to be used
+		 * @param country		The country of interest
+		 * @param date			The date of interest in the standard form of the dataset
+		 * @return			The value of vaccination rate on the date for the country
+		 */
+	 public static double getVaccinationPer(String dataset, String country,String date) {
+//			String oReport = &quot;&quot;;	
+<span class="fc" id="L614">			double vaccinationP = 0;</span>
+			
+<span class="fc bfc" id="L616" title="All 2 branches covered.">			for (CSVRecord rec : getFileParser(dataset)) {</span>
+				
+<span class="fc bfc" id="L618" title="All 2 branches covered.">				if (rec.get(&quot;location&quot;).equals(country)) {</span>
+<span class="fc bfc" id="L619" title="All 2 branches covered.">					if(rec.get(&quot;date&quot;).equals(date)) {</span>
+<span class="fc" id="L620">						String s = rec.get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
+<span class="fc bfc" id="L621" title="All 2 branches covered.">						if(s != &quot;&quot;)</span>
+<span class="fc" id="L622">							vaccinationP = Double.parseDouble(s);</span>
+					}
+//					String s = rec.get(&quot;new_cases&quot;);
+//					if (!s.equals(&quot;&quot;)) {
+//						confirmedCases += Long.parseLong(s);
+//						numRecord++;
+//					}
+				}		
+//				totalNumRecord++;
+<span class="fc" id="L631">			}</span>
+			
+//			oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);
+//			oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);
+//			oReport += String.format(&quot;Number of Confirmed Cases: %,d\n&quot;, confirmedCases);
+//			oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);
+//			
+<span class="fc" id="L638">			return vaccinationP;</span>
+	 }
+
+		/**
+		 * Get the vaccination rate data for a country over a specific period
+		 * @param dataset		The dataset to be used
+		 * @param country		The country of interest
+		 * @param period		The {@link comp3111.covid.model.Period} instance of the period of interest
+		 * @return			The list of vaccination rate for this country of each day within the period
+		 */
+	 public static List&lt;Double&gt; getVacRatePeriod(String dataset, String country, comp3111.covid.model.Period period) {
+//			String oReport = &quot;&quot;;	
+<span class="fc" id="L650">			List&lt;Double&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L651">			List&lt;String&gt; dates = period.getDatesBetween();</span>
+<span class="fc" id="L652">			int diff = laterthan(getStartDate(country),period.getstartDate());</span>
+<span class="fc bfc" id="L653" title="All 2 branches covered.">			for(int i = 0; i &lt; diff; i ++) {</span>
+<span class="fc" id="L654">				result.add(0.0);</span>
+			}
+<span class="fc bfc" id="L656" title="All 2 branches covered.">			for (CSVRecord rec : getFileParser(dataset)) {</span>
+				
+<span class="fc bfc" id="L658" title="All 2 branches covered.">				if (rec.get(&quot;location&quot;).equals(country)) {</span>
+<span class="fc bfc" id="L659" title="All 2 branches covered.">					if(dates.contains(rec.get(&quot;date&quot;))) {</span>
+<span class="fc" id="L660">						String s = rec.get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
+<span class="fc bfc" id="L661" title="All 2 branches covered.">						if(s != &quot;&quot;)</span>
+<span class="fc" id="L662">							result.add(Double.parseDouble(s));</span>
+						else
+<span class="fc" id="L664">							result.add(0.0);</span>
+					}
+//					String s = rec.get(&quot;new_cases&quot;);
+//					if (!s.equals(&quot;&quot;)) {
+//						confirmedCases += Long.parseLong(s);
+//						numRecord++;
+//					}
+				}		
+//				totalNumRecord++;
+<span class="fc" id="L673">			}</span>
+<span class="fc bfc" id="L674" title="All 2 branches covered.">			if(result.size() &lt; dates.size()) {</span>
+<span class="fc bfc" id="L675" title="All 2 branches covered.">				for(int i = result.size(); i &lt; dates.size(); i ++) {</span>
+<span class="fc" id="L676">					result.add(0.0);</span>
+				}
+			}
+			
+//			oReport = String.format(&quot;Dataset (%s): %,d Records\n\n&quot;, dataset, totalNumRecord);
+//			oReport += String.format(&quot;[Summary (%s)]\n&quot;, iso_code);
+//			oReport += String.format(&quot;Number of Confirmed Cases: %,d\n&quot;, confirmedCases);
+//			oReport += String.format(&quot;Number of Days Reported: %,d\n&quot;, numRecord);
+//			
+<span class="fc" id="L685">			return result;</span>
+		}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

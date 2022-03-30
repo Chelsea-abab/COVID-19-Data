@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Period.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.model</a> &gt; <span class="el_source">Period.java</span></div><h1>Period.java</h1><pre class="source lang-java linenums">package comp3111.covid.model;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * Class for Period to be used in chart task
+ */
+public class Period {
+	private String startDate;
+	private String endDate;
+	
+	/**
+	 * Constructor of the Period
+	 * @param startDate 	The starting date of this period in the standard form of the dataset
+	 * @param endDate		The ending date of this period in the standard form of the dataset
+	 */
+<span class="fc" id="L19">	public Period(String startDate, String endDate) {</span>
+<span class="fc" id="L20">		this.startDate = startDate;</span>
+<span class="fc" id="L21">		this.endDate = endDate;</span>
+<span class="fc" id="L22">	}</span>
+	
+	/**
+	 * The getter method to get the starting date of this period
+	 * @return			The starting date of this period in the standard form of the dataset
+	 */
+	public String getstartDate() {
+<span class="fc" id="L29">		return startDate;</span>
+	}
+	
+	/**
+	 * The getter method to get the ending date of this period
+	 * @return			The ending date of this period in the standard form of the dataset
+	 */
+	public String getendDate() {
+<span class="fc" id="L37">		return endDate;</span>
+	}
+	
+	/**
+	 * The getter method to get all the dates within this period (including the starting and 
+	 * ending dates)
+	 * @return			The list of date within this period (including the starting and 
+	 * 					ending dates) in the standard form of the dataset
+	 */
+	public List&lt;String&gt; getDatesBetween(){
+<span class="fc" id="L47">		List&lt;String&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L48">		String[] starts = this.startDate.split(&quot;/&quot;);</span>
+<span class="fc" id="L49">		String[] ends = this.endDate.split(&quot;/&quot;);</span>
+<span class="fc" id="L50">		int startDay = Integer.valueOf(starts[1]);</span>
+<span class="fc" id="L51">		int startMonth = Integer.valueOf(starts[0]);</span>
+<span class="fc" id="L52">		int startYr = Integer.valueOf(starts[2]);</span>
+<span class="fc" id="L53">		int endDay = Integer.valueOf(ends[1]);</span>
+<span class="fc" id="L54">		int endMonth = Integer.valueOf(ends[0]);</span>
+<span class="fc" id="L55">		int endYr = Integer.valueOf(ends[2]);</span>
+<span class="fc" id="L56">		LocalDate startdate = LocalDate.of(startYr,startMonth,startDay);</span>
+<span class="fc" id="L57">		LocalDate enddate = LocalDate.of(endYr,endMonth,endDay).plusDays(1);</span>
+<span class="fc" id="L58">		List&lt;LocalDate&gt; listOfDates = startdate.datesUntil(enddate)</span>
+<span class="fc" id="L59">                .collect(Collectors.toList());</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">		for(int i = 0; i &lt; listOfDates.size(); i++) {</span>
+<span class="fc" id="L61">			String temp = &quot;&quot;;</span>
+<span class="fc" id="L62">			temp += String.valueOf(listOfDates.get(i).getMonthValue());</span>
+<span class="fc" id="L63">			temp += &quot;/&quot;;</span>
+<span class="fc" id="L64">			temp += String.valueOf(listOfDates.get(i).getDayOfMonth());</span>
+<span class="fc" id="L65">			temp += &quot;/&quot;;</span>
+<span class="fc" id="L66">			temp += String.valueOf(listOfDates.get(i).getYear());</span>
+<span class="fc" id="L67">			result.add(temp);</span>
+		}
+<span class="fc" id="L69">		return result;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

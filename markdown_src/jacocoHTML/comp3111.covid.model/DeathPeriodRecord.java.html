@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DeathPeriodRecord.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.model</a> &gt; <span class="el_source">DeathPeriodRecord.java</span></div><h1>DeathPeriodRecord.java</h1><pre class="source lang-java linenums">package comp3111.covid.model;
+import comp3111.covid.DataAnalysis;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The implementation of abstract class {@link PeriodRecord} with the data of confirmed cases
+ */
+public class DeathPeriodRecord extends PeriodRecord{
+<span class="fc" id="L10">	private List&lt;Double&gt; NumDeathPerMillions =new ArrayList&lt;&gt;();</span>
+	
+	/**
+	 * Constructor to create a ConfirmedCaseRecord object and fetch the data from the dataset
+	 * @param country 		The country of this record
+	 * @param period		The {@link Period} object of period of this record in the standard form of the dataset
+	 */
+	public DeathPeriodRecord(String country, Period period) {
+<span class="fc" id="L18">		super(country,period);</span>
+<span class="fc" id="L19">		this.NumDeathPerMillions = DataAnalysis.getDeathPerPeriod(&quot;COVID_Dataset_v1.0.csv&quot; , country, period);</span>
+<span class="fc" id="L20">	}</span>
+	
+	/**
+	 * Getter method to get the total number of confirmed cases of this record
+	 * @return		The list of total number of confirmed cases of this record
+	 */
+	
+    public final List&lt;Double&gt; getNumDeathPerMillions() {
+<span class="fc" id="L28">    	return this.NumDeathPerMillions;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

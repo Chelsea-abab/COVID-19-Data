@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PeriodRecord.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.model</a> &gt; <span class="el_source">PeriodRecord.java</span></div><h1>PeriodRecord.java</h1><pre class="source lang-java linenums">package comp3111.covid.model;
+
+/**
+ * Abstract class for all types of record over a period
+ */
+public abstract class PeriodRecord {
+	private String country;
+	private Period period;
+	
+	/**
+	 * Constructor for the PeriodRecord class to be called in its subclasses
+	 * @param country 		The country of this record
+	 * @param period 		The {@link Period} object of period of this record
+	 */
+<span class="fc" id="L15">	protected PeriodRecord(String country, Period period) {</span>
+<span class="fc" id="L16">        this.country = country;</span>
+<span class="fc" id="L17">        this.period = period;</span>
+<span class="fc" id="L18">    }</span>
+
+	/**
+	 * Getter method to get the country of this record
+	 * @return		The country of this record
+	 */
+    public final String getCountry() {
+<span class="nc" id="L25">        return this.country;</span>
+    }
+    
+    /**
+     * Getter method to get the date of this record
+     * @return		The {@link Period} object of period of this record in the standard form of the dataset
+     */
+    public final Period getPeriod() {
+<span class="nc" id="L33">    	return this.period;</span>
+    }
+    
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

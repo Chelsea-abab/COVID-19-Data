@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PeriodParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid.util</a> &gt; <span class="el_source">PeriodParser.java</span></div><h1>PeriodParser.java</h1><pre class="source lang-java linenums">package comp3111.covid.util;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.text.SimpleDateFormat;
+/**
+ * Parse and validate the period of input, and convert to standard format
+ */
+<span class="nc" id="L9">public class PeriodParser {</span>
+	/**
+	 * Parse the input of the user and convert to a {@link comp3111.covid.model.Period} object
+	 * @param s		User input of the starting and ending date
+	 * @return		A {@link comp3111.covid.model.Period} object on the input date
+	 * Notice: this method is to be modified
+	 */
+	public static Date[] transformToPeriod(String s) {
+<span class="fc" id="L17">		int fromIndex=0,toIndex=0;</span>
+<span class="fc bfc" id="L18" title="All 2 branches covered.">		for(int i=3;i&lt;s.length();i++) {</span>
+<span class="pc bpc" id="L19" title="3 of 8 branches missed.">			if(s.charAt(i)=='m' &amp;&amp; s.charAt(i-1)=='o' &amp;&amp; s.charAt(i-2)=='r' &amp;&amp; s.charAt(i-3)=='f')</span>
+<span class="fc" id="L20">				fromIndex=i;</span>
+<span class="fc bfc" id="L21" title="All 4 branches covered.">			if(s.charAt(i)=='o' &amp;&amp; s.charAt(i-1)=='t')</span>
+<span class="fc" id="L22">				toIndex=i;</span>
+		}
+<span class="fc bfc" id="L24" title="All 4 branches covered.">		if(fromIndex==0 || toIndex==0)</span>
+<span class="fc" id="L25">			return null;</span>
+<span class="fc" id="L26">		String s1=s.substring(fromIndex+2,toIndex-2);</span>
+<span class="fc" id="L27">		String s2=s.substring(toIndex+2);</span>
+<span class="fc" id="L28">		Date res[]=new Date[2];</span>
+<span class="fc" id="L29">		res[0]=DateParser.transformToDate(s1);</span>
+<span class="fc" id="L30">		res[1]=DateParser.transformToDate(s2);</span>
+<span class="fc" id="L31">		return res;</span>
+	}
+
+	/**
+	 * Parse the input of the user and convert starting and ending dates to the standard form of the dataset
+	 * @param s		User input of the date
+	 * @return		Array of String consisting the starting and ending date in standard form of the dataset
+	 */
+	public static String[] transformToPeriodString(String s) {
+<span class="fc" id="L40">		  Date[] date=new Date[2];</span>
+<span class="fc" id="L41">		  date=transformToPeriod(s);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">		  if(date==null)</span>
+<span class="fc" id="L43">			  return null;</span>
+<span class="fc" id="L44">		  String[] res=new String[2];</span>
+<span class="fc" id="L45">		  SimpleDateFormat sdf = new SimpleDateFormat(&quot;M/d/yyyy&quot;);</span>
+<span class="fc" id="L46">		  res[0] = sdf.format(date[0]);</span>
+<span class="fc" id="L47">		  res[1] = sdf.format(date[1]);</span>
+<span class="fc" id="L48">		  return res;</span>
+		  
+	}
+	
+	/**
+	 * Validate the user input to check whether both input dates are in the correct format
+	 * @param s			User input of the date
+	 * @return			a boolean variable indicate whether the input dates are in correct format
+	 */
+	public static boolean isValidDateInPeriod(String s) {
+<span class="fc" id="L58">		int fromIndex=0,toIndex=0;</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">		for(int i=3;i&lt;s.length();i++) {</span>
+<span class="pc bpc" id="L60" title="2 of 8 branches missed.">			if(s.charAt(i)=='m' &amp;&amp; s.charAt(i-1)=='o' &amp;&amp; s.charAt(i-2)=='r' &amp;&amp; s.charAt(i-3)=='f')</span>
+<span class="fc" id="L61">				fromIndex=i;</span>
+<span class="fc bfc" id="L62" title="All 4 branches covered.">			if(s.charAt(i)=='o' &amp;&amp; s.charAt(i-1)=='t')</span>
+<span class="fc" id="L63">				toIndex=i;</span>
+		}
+<span class="fc bfc" id="L65" title="All 6 branches covered.">		if(fromIndex!=3 || (toIndex!=18 &amp;&amp; toIndex!=19))</span>
+<span class="fc" id="L66">			return false;</span>
+<span class="fc" id="L67">		String s1=s.substring(fromIndex+2,toIndex-2);</span>
+<span class="fc" id="L68">		String s2=s.substring(toIndex+2);</span>
+<span class="fc bfc" id="L69" title="All 4 branches covered.">		return (DateParser.isValidDate(s1)&amp;&amp;DateParser.isValidDate(s2));</span>
+	}
+	
+	/**
+	 * Validate the user input to check whether both input dates are within legal range
+	 * @param s			User input of the date
+	 * @return			a boolean variable indicate whether the input dates are within legal range
+	 */
+	public static boolean isDateWithinRangeInPeriod(String s) {
+<span class="fc bfc" id="L78" title="All 2 branches covered.">		if(isValidDateInPeriod(s)) {</span>
+<span class="fc" id="L79">			int fromIndex=0,toIndex=0;</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">			for(int i=3;i&lt;s.length();i++) {</span>
+<span class="pc bpc" id="L81" title="3 of 8 branches missed.">				if(s.charAt(i)=='m' &amp;&amp; s.charAt(i-1)=='o' &amp;&amp; s.charAt(i-2)=='r' &amp;&amp; s.charAt(i-3)=='f')</span>
+<span class="fc" id="L82">					fromIndex=i;</span>
+<span class="pc bpc" id="L83" title="1 of 4 branches missed.">				if(s.charAt(i)=='o' &amp;&amp; s.charAt(i-1)=='t')</span>
+<span class="fc" id="L84">					toIndex=i;</span>
+			}
+<span class="fc" id="L86">			String s1=s.substring(fromIndex+2,toIndex-2);</span>
+<span class="fc" id="L87">			String s2=s.substring(toIndex+2);</span>
+<span class="fc bfc" id="L88" title="All 4 branches covered.">			return (DateParser.isDateWithinRange(s1)&amp;&amp;DateParser.isDateWithinRange(s2));</span>
+		}
+		else
+<span class="fc" id="L91">			return false;</span>
+		
+	}
+	
+	/**
+	 * Validate the user input to check whether the starting date is no later than ending date
+	 * @param s			User input of the date
+	 * @return			a boolean variable indicating whether the starting date is no later than ending date
+	 */
+	public static boolean isStartBeforeEnd(String s) {
+<span class="fc bfc" id="L101" title="All 2 branches covered.">		if(isDateWithinRangeInPeriod(s)) {</span>
+<span class="fc" id="L102">			Date date[]=transformToPeriod(s);</span>
+<span class="fc" id="L103">			return date[0].before(date[1]);</span>
+		}
+		else
+<span class="fc" id="L106">			return false;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

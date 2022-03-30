@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"comp3111.covid"},{"l":"comp3111.covid.model"},{"l":"comp3111.covid.util"},{"l":"comp3111.covid.view"},{"l":"所有程序包","u":"allpackages-index.html"}];updateSearchResults();
